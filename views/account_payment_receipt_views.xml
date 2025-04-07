@@ -9,7 +9,6 @@
                 <field name="date"/>
                 <field name="partner_id"/>
                 <field name="payment_names"/>
-                <field name="amount_total" widget="monetary"/>
                 <field name="state"/>
                 <button name="action_print_receipt" string="Print Receipt" type="object" icon="fa-print" class="oe_highlight"/>
             </tree>
@@ -28,7 +27,6 @@
                         <field name="date"/>
                         <field name="partner_id"/>
                         <field name="state"/>
-                        <field name="amount_total" widget="monetary"/>
                     </group>
                     <group>
                         <field name="payment_names" readonly="1"/>
