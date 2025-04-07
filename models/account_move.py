@@ -69,5 +69,5 @@ class AccountMove(models.Model):
         )
 
         return self.env.ref(
-            "custom_payment_group_report.action_report_payment_group_receipt"
+            "grouped_payment_receipt.action_report_payment_group_receipt"
         ).report_action(temp_records)

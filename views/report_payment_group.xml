@@ -92,7 +92,7 @@
     <template id="report_payment_group_receipt">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="o">
-                <t t-call="custom_payment_group_report.report_payment_group_receipt_document"/>
+                <t t-call="grouped_payment_receipt.report_payment_group_receipt_document"/>
             </t>
         </t>
     </template>
@@ -101,7 +101,7 @@
         <field name="name">Grouped Payment Receipt</field>
         <field name="model">account.payment.group.temp</field>
         <field name="report_type">qweb-pdf</field>
-        <field name="report_name">custom_payment_group_report.report_payment_group_receipt</field>
-        <field name="report_file">custom_payment_group_report.report_payment_group_receipt</field>
+        <field name="report_name">grouped_payment_receipt.report_payment_group_receipt</field>
+        <field name="report_file">grouped_payment_receipt.report_payment_group_receipt</field>
     </record>
 </odoo>
