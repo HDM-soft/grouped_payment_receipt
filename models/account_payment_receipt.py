@@ -5,6 +5,7 @@ class AccountPaymentReceipt(models.Model):
     _name = "account.payment.receipt"
     _description = "Grouped Payment Receipt"
     _order = "date desc, id desc"
+    _inherit = ["mail.thread", "mail.activity.mixin"]  # Agregamos los mixins
 
     name = fields.Char(
         string="Receipt Number", required=True, copy=False, readonly=True, default="New"
@@ -14,7 +15,7 @@ class AccountPaymentReceipt(models.Model):
     payment_ids = fields.Many2many("account.payment", string="Payments", required=True)
     payment_names = fields.Char(
         string="Original Payments", compute="_compute_payment_names", store=True
-    )  # Nuevo campo
+    )
     move_ids = fields.Many2many("account.move", string="Invoices", required=True)
     company_id = fields.Many2one(
         "res.company", string="Company", compute="_compute_company", store=True
