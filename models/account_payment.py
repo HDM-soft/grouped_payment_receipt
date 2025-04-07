@@ -22,12 +22,10 @@ class AccountPayment(models.Model):
         # Obtener las facturas asociadas a los pagos
         move_ids = self.env["account.move"]
         for payment in payments:
-            # Buscar las líneas del pago
             payment_lines = payment.move_id.line_ids.filtered(
                 lambda l: l.account_id.account_type
                 in ("asset_receivable", "liability_payable")
             )
-            # Buscar reconciliaciones asociadas a esas líneas
             reconciliations = self.env["account.partial.reconcile"].search(
                 [
                     "|",
@@ -35,7 +33,6 @@ class AccountPayment(models.Model):
                     ("credit_move_id", "in", payment_lines.ids),
                 ]
             )
-            # Obtener las facturas (account.move) asociadas
             for rec in reconciliations:
                 if rec.debit_move_id in payment_lines:
                     move = rec.credit_move_id.move_id

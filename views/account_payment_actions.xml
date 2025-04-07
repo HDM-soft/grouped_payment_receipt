@@ -8,6 +8,5 @@
         <field name="code">
             action = records.action_generate_grouped_payment_receipt()
         </field>
-        <field name="domain">[('state', '=', 'posted')]</field>
     </record>
 </odoo>
