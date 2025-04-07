@@ -7,7 +7,7 @@ class AccountPaymentGroupTemp(models.AbstractModel):
     _auto = False  # No crea tabla en la base de datos
 
     partner_id = fields.Many2one("res.partner", string="Partner", required=True)
-    payment_date = fields.Date(string="Payment Date", required=True)
+    date = fields.Date(string="Payment Date", required=True)
     # Reemplazamos Many2many por una lista de IDs que pasaremos al reporte
     payment_ids_list = fields.Binary(
         string="Payment IDs", readonly=True

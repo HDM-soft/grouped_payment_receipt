@@ -64,8 +64,8 @@ class AccountMove(models.Model):
                 {
                     "partner_id": partner_id,
                     "date": date,
-                    "payment_ids": [(6, 0, payments.ids)],
-                    "move_ids": [(6, 0, self.ids)],
+                    "payment_ids_list": payments.ids,  # Pasamos los IDs como lista
+                    "move_ids_list": self.ids,  # Pasamos los IDs como lista
                 }
             )
             temp_records |= temp_record
