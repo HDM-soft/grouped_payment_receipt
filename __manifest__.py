@@ -12,6 +12,7 @@
     "development_status": "Production/Stable",
     "depends": ["account", "l10n_ar"],
     "data": [
+        "security/ir.model.access.csv",
         "views/report_payment_group.xml",
         "views/account_move_actions.xml",
     ],
