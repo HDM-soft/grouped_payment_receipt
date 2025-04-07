@@ -8,7 +8,7 @@
     "website": "https://onlyone.odoo.com/",
     "license": "AGPL-3",
     "category": "Technical Settings",
-    "version": "17.0.9.6.0",
+    "version": "17.0.9.7.0",
     "development_status": "Production/Stable",
     "depends": ["account", "l10n_ar"],
     "data": [
@@ -16,6 +16,7 @@
         "data/sequence_data.xml",
         "views/report_payment_receipt.xml",
         "views/account_payment_actions.xml",
+        "views/account_payment_receipt_views.xml",
     ],
     "application": False,
     "installable": True,

@@ -1,0 +1,69 @@
+<odoo>
+    <!-- Vista Tree -->
+    <record id="view_account_payment_receipt_tree" model="ir.ui.view">
+        <field name="name">account.payment.receipt.tree</field>
+        <field name="model">account.payment.receipt</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="date"/>
+                <field name="partner_id"/>
+                <field name="payment_names"/>
+                <field name="amount_total" widget="monetary"/>
+                <field name="state"/>
+                <button name="action_print_receipt" string="Print Receipt" type="object" icon="fa-print" class="oe_highlight"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vista Form -->
+    <record id="view_account_payment_receipt_form" model="ir.ui.view">
+        <field name="name">account.payment.receipt.form</field>
+        <field name="model">account.payment.receipt</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="date"/>
+                        <field name="partner_id"/>
+                        <field name="state"/>
+                        <field name="amount_total" widget="monetary"/>
+                    </group>
+                    <group>
+                        <field name="payment_names" readonly="1"/>
+                    </group>
+                    <notebook>
+                        <page string="Payments">
+                            <field name="payment_ids" widget="many2many_tags"/>
+                        </page>
+                        <page string="Invoices">
+                            <field name="move_ids" widget="many2many_tags"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Acción para Abrir la Vista -->
+    <record id="action_account_payment_receipt" model="ir.actions.act_window">
+        <field name="name">Grouped Payment Receipts</field>
+        <field name="res_model">account.payment.receipt</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('state', '=', 'posted')]</field>
+    </record>
+
+    <!-- Menú -->
+    <menuitem
+        id="menu_account_payment_receipt"
+        name="Grouped Payment Receipts"
+        parent="account.menu_finance_receivables"
+        action="action_account_payment_receipt"
+        sequence="20"/>
+</odoo>

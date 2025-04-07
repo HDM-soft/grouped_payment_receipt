@@ -12,6 +12,9 @@ class AccountPaymentReceipt(models.Model):
     date = fields.Date(string="Date", required=True, default=fields.Date.context_today)
     partner_id = fields.Many2one("res.partner", string="Partner", required=True)
     payment_ids = fields.Many2many("account.payment", string="Payments", required=True)
+    payment_names = fields.Char(
+        string="Original Payments", compute="_compute_payment_names", store=True
+    )  # Nuevo campo
     move_ids = fields.Many2many("account.move", string="Invoices", required=True)
     company_id = fields.Many2one(
         "res.company", string="Company", compute="_compute_company", store=True
@@ -35,6 +38,15 @@ class AccountPaymentReceipt(models.Model):
         default="draft",
         required=True,
     )
+
+    @api.depends("payment_ids")
+    def _compute_payment_names(self):
+        for record in self:
+            record.payment_names = (
+                ", ".join(record.payment_ids.mapped("name"))
+                if record.payment_ids
+                else ""
+            )
 
     @api.depends("payment_ids")
     def _compute_company(self):
@@ -71,3 +83,9 @@ class AccountPaymentReceipt(models.Model):
 
     def action_draft(self):
         self.write({"state": "draft"})
+
+    def action_print_receipt(self):
+        """Reimprime el recibo."""
+        return self.env.ref(
+            "grouped_payment_receipt.action_report_payment_receipt"
+        ).report_action(self)
