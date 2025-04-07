@@ -76,14 +76,19 @@
                                         <t t-set="payment_lines" t-value="payment.move_id.line_ids.filtered(lambda l: l.account_id.account_type in ('asset_receivable', 'liability_payable'))"/>
                                         <t t-set="reconciliations" t-value="o.env['account.partial.reconcile'].search(['|', ('debit_move_id', 'in', payment_lines.ids), ('credit_move_id', 'in', payment_lines.ids)])"/>
                                         <t t-set="invoice_currencies" t-value="o.env['res.currency']"/>
+                                        <t t-set="currency_rate" t-value="0.0"/>
                                         <t t-foreach="reconciliations" t-as="rec">
                                             <t t-set="move" t-value="rec.credit_move_id.move_id if rec.debit_move_id in payment_lines else rec.debit_move_id.move_id"/>
                                             <t t-if="move.is_invoice()">
                                                 <t t-set="invoice_currencies" t-value="invoice_currencies | move.currency_id"/>
+                                                <!-- Obtener el computed_currency_rate de la factura -->
+                                                <t t-if="payment.currency_id.name == 'ARS' and move.currency_id.name == 'USD'">
+                                                    <t t-set="currency_rate" t-value="move.computed_currency_rate"/>
+                                                </t>
                                             </t>
                                         </t>
                                         <t t-if="payment.currency_id.name == 'ARS' and 'USD' in invoice_currencies.mapped('name')">
-                                            <span t-out="'%.2f' % payment.currency_rate"/> ARS/USD
+                                            <span t-out="'%.2f' % currency_rate"/> ARS/USD
                                         </t>
                                     </td>
                                     <td class="text-right o_price_total">
