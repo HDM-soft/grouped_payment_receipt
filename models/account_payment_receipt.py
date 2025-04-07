@@ -5,7 +5,7 @@ class AccountPaymentReceipt(models.Model):
     _name = "account.payment.receipt"
     _description = "Grouped Payment Receipt"
     _order = "date desc, id desc"
-    _inherit = ["mail.thread", "mail.activity.mixin"]  # Agregamos los mixins
+    _inherit = ["mail.thread", "mail.activity.mixin"]
 
     name = fields.Char(
         string="Receipt Number", required=True, copy=False, readonly=True, default="New"
@@ -22,12 +22,6 @@ class AccountPaymentReceipt(models.Model):
     )
     currency_id = fields.Many2one(
         "res.currency", string="Currency", compute="_compute_currency", store=True
-    )
-    amount_total = fields.Monetary(
-        string="Total Amount",
-        compute="_compute_amount_total",
-        store=True,
-        currency_field="currency_id",
     )
     state = fields.Selection(
         [
@@ -62,11 +56,6 @@ class AccountPaymentReceipt(models.Model):
             record.currency_id = (
                 record.company_id.currency_id if record.company_id else False
             )
-
-    @api.depends("payment_ids")
-    def _compute_amount_total(self):
-        for record in self:
-            record.amount_total = sum(record.payment_ids.mapped("amount"))
 
     @api.model
     def create(self, vals):

@@ -59,11 +59,19 @@
         <field name="domain">[('state', '=', 'posted')]</field>
     </record>
 
-    <!-- Menú -->
+    <!-- Menú para Clientes (Receivables) -->
     <menuitem
-        id="menu_account_payment_receipt"
+        id="menu_account_payment_receipt_receivables"
         name="Grouped Payment Receipts"
         parent="account.menu_finance_receivables"
+        action="action_account_payment_receipt"
+        sequence="20"/>
+
+    <!-- Menú para Proveedores (Payables) -->
+    <menuitem
+        id="menu_account_payment_receipt_payables"
+        name="Grouped Payment Receipts"
+        parent="account.menu_finance_payables"
         action="action_account_payment_receipt"
         sequence="20"/>
 </odoo>
