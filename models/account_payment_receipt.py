@@ -57,6 +57,24 @@ class AccountPaymentReceipt(models.Model):
                 record.company_id.currency_id if record.company_id else False
             )
 
+    def get_payments_by_currency(self):
+        """Devuelve los pagos agrupados por moneda como una lista de tuplas (currency, payments)."""
+        self.ensure_one()
+        payments_by_currency = {}
+        for payment in self.payment_ids.sorted(
+            key=lambda p: (p.currency_id.name, p.date)
+        ):
+            currency_id = payment.currency_id.id
+            if currency_id not in payments_by_currency:
+                payments_by_currency[currency_id] = []
+            payments_by_currency[currency_id].append(payment)
+        # Convertir el diccionario a una lista de tuplas (currency, payments)
+        result = []
+        for currency_id, payments in payments_by_currency.items():
+            currency = self.env["res.currency"].browse(currency_id)
+            result.append((currency, payments))
+        return result
+
     @api.model
     def create(self, vals):
         if vals.get("name", "New") == "New":

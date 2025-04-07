@@ -29,68 +29,65 @@
                     </div>
                 </div>
                 <br/>
-                <!-- Agrupar pagos por moneda -->
-                <t t-foreach="o.payment_ids.sorted(key=lambda p: (p.currency_id.name, p.date))" t-as="payment">
-                    <!-- Crear una nueva tabla por moneda -->
-                    <t t-if="payment.payment_index == 0 or payment.currency_id != o.payment_ids[payment.payment_index - 1].currency_id">
-                        <table class="table table-sm o_main_table" name="payments_table">
-                            <thead>
+                <!-- Usar el método get_payments_by_currency para obtener los pagos agrupados -->
+                <t t-foreach="o.get_payments_by_currency()" t-as="currency_group">
+                    <t t-set="currency" t-value="currency_group[0]"/>
+                    <t t-set="payments" t-value="currency_group[1]"/>
+                    <table class="table table-sm o_main_table" name="payments_table">
+                        <thead>
+                            <tr>
+                                <th><span>Referencia</span></th>
+                                <th><span>Diario</span></th>
+                                <th><span>Referencia</span></th>
+                                <th><span>Fecha</span></th>
+                                <th class="text-right"><span>Importe</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="payments" t-as="payment">
                                 <tr>
-                                    <th><span>Referencia</span></th>
-                                    <th><span>Diario</span></th>
-                                    <th><span>Referencia</span></th>
-                                    <th><span>Fecha</span></th>
-                                    <th class="text-right"><span>Importe</span></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <t t-foreach="o.payment_ids.sorted(key=lambda p: (p.currency_id.name, p.date))" t-as="payment_inner">
-                                    <t t-if="payment_inner.currency_id == payment.currency_id">
-                                        <tr>
-                                            <td>
-                                                <span t-field="payment_inner.name"/>
-                                            </td>
-                                            <td>
-                                                <span t-field="payment_inner.journal_id.name"/>
-                                            </td>
-                                            <td>
-                                                <t t-if="payment_inner.l10n_latam_check_number">
-                                                    <span t-out="'Cheque nro %s' % (payment_inner.l10n_latam_check_number)"/>
-                                                    <span t-if="payment_inner.journal_id.bank_id" t-out="' - %s' % (payment_inner.journal_id.bank_id.name)"/>
-                                                </t>
-                                                <t t-else="">
-                                                    <span t-if="payment_inner.ref"> - Ref: <span t-field="payment_inner.ref"/></span>
-                                                    <span t-out="' (%s)' % (payment_inner.payment_method_id.name)"/>
-                                                    <t t-set="payment_lines" t-value="payment_inner.move_id.line_ids.filtered(lambda l: l.account_id.account_type in ('asset_receivable', 'liability_payable'))"/>
-                                                    <t t-set="reconciliations" t-value="o.env['account.partial.reconcile'].search(['|', ('debit_move_id', 'in', payment_lines.ids), ('credit_move_id', 'in', payment_lines.ids)])"/>
-                                                    <t t-if="not reconciliations">
-                                                        <span> - Pago a cuenta</span>
-                                                    </t>
-                                                </t>
-                                            </td>
-                                            <td>
-                                                <span t-if="payment_inner.date"><span t-field="payment_inner.date"/></span>
-                                            </td>
-                                            <td class="text-right o_price_total">
-                                                <span t-field="payment_inner.amount" t-options="{'widget': 'monetary', 'display_currency': payment_inner.currency_id}"/>
-                                            </td>
-                                        </tr>
-                                    </t>
-                                </t>
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <td colspan="4"><strong><span>Total Pagado</span></strong></td>
-                                    <td class="text-right">
-                                        <strong>
-                                            <span t-out="sum(p.amount for p in o.payment_ids if p.currency_id == payment.currency_id)" t-options="{'widget': 'monetary', 'display_currency': payment.currency_id}"/>
-                                        </strong>
+                                    <td>
+                                        <span t-field="payment.name"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="payment.journal_id.name"/>
+                                    </td>
+                                    <td>
+                                        <t t-if="payment.l10n_latam_check_number">
+                                            <span t-out="'Cheque nro %s' % (payment.l10n_latam_check_number)"/>
+                                            <span t-if="payment.journal_id.bank_id" t-out="' - %s' % (payment.journal_id.bank_id.name)"/>
+                                        </t>
+                                        <t t-else="">
+                                            <span t-if="payment.ref"> - Ref: <span t-field="payment.ref"/></span>
+                                            <span t-out="' (%s)' % (payment.payment_method_id.name)"/>
+                                            <t t-set="payment_lines" t-value="payment.move_id.line_ids.filtered(lambda l: l.account_id.account_type in ('asset_receivable', 'liability_payable'))"/>
+                                            <t t-set="reconciliations" t-value="o.env['account.partial.reconcile'].search(['|', ('debit_move_id', 'in', payment_lines.ids), ('credit_move_id', 'in', payment_lines.ids)])"/>
+                                            <t t-if="not reconciliations">
+                                                <span> - Pago a cuenta</span>
+                                            </t>
+                                        </t>
+                                    </td>
+                                    <td>
+                                        <span t-if="payment.date"><span t-field="payment.date"/></span>
+                                    </td>
+                                    <td class="text-right o_price_total">
+                                        <span t-field="payment.amount" t-options="{'widget': 'monetary', 'display_currency': payment.currency_id}"/>
                                     </td>
                                 </tr>
-                            </tfoot>
-                        </table>
-                        <br/>
-                    </t>
+                            </t>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="4"><strong><span>Total Pagado</span></strong></td>
+                                <td class="text-right">
+                                    <strong>
+                                        <span t-out="sum(p.amount for p in payments)" t-options="{'widget': 'monetary', 'display_currency': currency}"/>
+                                    </strong>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    <br/>
                 </t>
                 <table class="table table-sm o_main_table" name="invoices_table" t-if="o.move_ids">
                     <thead>
