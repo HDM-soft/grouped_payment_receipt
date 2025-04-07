@@ -1,5 +1,5 @@
 <odoo>
-    <template id="report_payment_group_receipt_document" name="Grouped Payment Receipt">
+    <template id="report_payment_receipt_document" name="Grouped Payment Receipt">
         <t t-call="web.external_layout">
             <t t-set="o" t-value="o"/>
             <t t-set="partner" t-value="o.partner_id"/>
@@ -9,7 +9,7 @@
             <t t-set="report_date" t-value="o.date"/>
             <t t-set="document_letter" t-value="'X'"/>
             <t t-set="document_legend" t-value="'Doc. no válido como factura'"/>
-            <t t-set="report_number" t-value="'REC-' + o.date.strftime('%Y%m%d')"/>
+            <t t-set="report_number" t-value="o.name"/>
             <t t-set="report_name" t-value="o.payment_ids[0].payment_type == 'outbound' and 'Orden de pago' or 'Recibo'"/>
             <t t-set="header_address" t-value="company.partner_id"/>
 
@@ -37,7 +37,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <t t-foreach="o.payment_ids" t-as="payment">
+                        <t t-foreach="o.payment_ids.sorted(key=lambda p: p.date)" t-as="payment">
                             <tr>
                                 <td t-if="payment.payment_method_code in ['check_printing', 'manual']">
                                     <span t-out="'Cheque nro %s' % (payment.l10n_latam_check_number or payment.ref)"/>
@@ -48,6 +48,13 @@
                                 <td t-else="">
                                     <span t-field="payment.journal_id.name"/>
                                     <span t-out="' (%s)' % (payment.payment_method_id.name)"/>
+                                    <span t-if="payment.ref"> - Ref: <span t-field="payment.ref"/></span>
+                                    <!-- Indicar si es un pago a cuenta -->
+                                    <t t-set="payment_lines" t-value="payment.move_id.line_ids.filtered(lambda l: l.account_id.account_type in ('asset_receivable', 'liability_payable'))"/>
+                                    <t t-set="reconciliations" t-value="o.env['account.partial.reconcile'].search(['|', ('debit_move_id', 'in', payment_lines.ids), ('credit_move_id', 'in', payment_lines.ids)])"/>
+                                    <t t-if="not reconciliations">
+                                        <span> - Pago a cuenta</span>
+                                    </t>
                                 </td>
                                 <td class="text-right o_price_total">
                                     <span t-field="payment.amount" t-options="{'widget': 'monetary', 'display_currency': payment.currency_id}"/>
@@ -65,43 +72,55 @@
                     </tfoot>
                 </table>
                 <br/>
-                <table class="table table-sm o_main_table" name="invoices_table">
+                <table class="table table-sm o_main_table" name="invoices_table" t-if="o.move_ids">
                     <thead>
                         <tr>
                             <th><span>Facturas Conciliadas</span></th>
                             <th class="text-center"><span>Fecha</span></th>
                             <th class="text-right"><span>Importe Total</span></th>
+                            <th class="text-right"><span>Saldo Pendiente</span></th>
                         </tr>
                     </thead>
                     <tbody>
-                        <t t-foreach="o.move_ids" t-as="move">
+                        <t t-foreach="o.move_ids.sorted(key=lambda m: m.invoice_date)" t-as="move">
                             <tr>
                                 <td><span t-field="move.name"/></td>
                                 <td class="text-center"><span t-field="move.invoice_date"/></td>
                                 <td class="text-right o_price_total">
                                     <span t-field="move.amount_total" t-options="{'widget': 'monetary', 'display_currency': move.currency_id}"/>
                                 </td>
+                                <td class="text-right o_price_total">
+                                    <span t-field="move.amount_residual" t-options="{'widget': 'monetary', 'display_currency': move.currency_id}"/>
+                                </td>
                             </tr>
                         </t>
                     </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="3"><strong><span>Total Saldo Pendiente</span></strong></td>
+                            <td class="text-right">
+                                <strong><span t-out="sum(move.amount_residual for move in o.move_ids)" t-options="{'widget': 'monetary', 'display_currency': o.move_ids[0].currency_id if o.move_ids else o.currency_id}"/></strong>
+                            </td>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
         </t>
     </template>
 
-    <template id="report_payment_group_receipt">
+    <template id="report_payment_receipt">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="o">
-                <t t-call="grouped_payment_receipt.report_payment_group_receipt_document"/>
+                <t t-call="grouped_payment_receipt.report_payment_receipt_document"/>
             </t>
         </t>
     </template>
 
-    <record id="action_report_payment_group_receipt" model="ir.actions.report">
+    <record id="action_report_payment_receipt" model="ir.actions.report">
         <field name="name">Grouped Payment Receipt</field>
-        <field name="model">account.payment.group.temp</field>
+        <field name="model">account.payment.receipt</field>
         <field name="report_type">qweb-pdf</field>
-        <field name="report_name">grouped_payment_receipt.report_payment_group_receipt</field>
-        <field name="report_file">grouped_payment_receipt.report_payment_group_receipt</field>
+        <field name="report_name">grouped_payment_receipt.report_payment_receipt</field>
+        <field name="report_file">grouped_payment_receipt.report_payment_receipt</field>
     </record>
 </odoo>
