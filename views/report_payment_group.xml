@@ -10,13 +10,13 @@
             <t t-set="document_letter" t-value="'X'"/>
             <t t-set="document_legend" t-value="'Doc. no válido como factura'"/>
             <t t-set="report_number" t-value="'REC-' + o.date.strftime('%Y%m%d')"/>
-            <t t-set="report_name" t-value="o.env['account.payment'].browse(o.payment_ids_list)[0].payment_type == 'outbound' and 'Orden de pago' or 'Recibo'"/>
+            <t t-set="report_name" t-value="o.payment_ids[0].payment_type == 'outbound' and 'Orden de pago' or 'Recibo'"/>
             <t t-set="header_address" t-value="company.partner_id"/>
 
             <div class="page">
                 <div id="informations" class="row mt8 mb8">
                     <div class="col-6">
-                        <strong><span t-out="o.env['account.payment'].browse(o.payment_ids_list)[0].payment_type == 'outbound' and 'Proveedor: ' or 'Cliente: '"/></strong>
+                        <strong><span t-out="o.payment_ids[0].payment_type == 'outbound' and 'Proveedor: ' or 'Cliente: '"/></strong>
                         <span t-field="partner.commercial_partner_id.name"/>
                         <br/>
                         <span t-out="partner" t-options="{'widget': 'contact', 'fields': ['address'], 'no_marker': True, 'no_tag_br': True}"/>
@@ -37,7 +37,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <t t-foreach="o.env['account.payment'].browse(o.payment_ids_list)" t-as="payment">
+                        <t t-foreach="o.payment_ids" t-as="payment">
                             <tr>
                                 <td t-if="payment.payment_method_code in ['check_printing', 'manual']">
                                     <span t-out="'Cheque nro %s' % (payment.l10n_latam_check_number or payment.ref)"/>
@@ -74,7 +74,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <t t-foreach="o.env['account.move'].browse(o.move_ids_list)" t-as="move">
+                        <t t-foreach="o.move_ids" t-as="move">
                             <tr>
                                 <td><span t-field="move.name"/></td>
                                 <td class="text-center"><span t-field="move.invoice_date"/></td>

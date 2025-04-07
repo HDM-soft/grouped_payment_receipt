@@ -55,20 +55,18 @@ class AccountMove(models.Model):
                 grouped_data[key] = self.env["account.payment"]
             grouped_data[key] |= payment
 
-        # Crear registros en memoria sin usar create
-        temp_model = self.env["account.payment.group.temp"]
-        temp_records = temp_model.browse()  # Recordset vacío
-        for (partner_id, date), payments in grouped_data.items():
-            # Construir un registro en memoria
-            temp_record = temp_model.new(
+        # Crear registros transitorios usando create
+        temp_records = self.env["account.payment.group.temp"].create(
+            [
                 {
                     "partner_id": partner_id,
                     "date": date,
-                    "payment_ids_list": payments.ids,  # Pasamos los IDs como lista
-                    "move_ids_list": self.ids,  # Pasamos los IDs como lista
+                    "payment_ids": [(6, 0, payments.ids)],
+                    "move_ids": [(6, 0, self.ids)],
                 }
-            )
-            temp_records |= temp_record
+                for (partner_id, date), payments in grouped_data.items()
+            ]
+        )
 
         return self.env.ref(
             "custom_payment_group_report.action_report_payment_group_receipt"
