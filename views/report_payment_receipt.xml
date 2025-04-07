@@ -40,6 +40,7 @@
                                 <th><span>Diario</span></th>
                                 <th><span>Referencia</span></th>
                                 <th><span>Fecha</span></th>
+                                <th><span>Tipo de Cambio</span></th>
                                 <th class="text-right"><span>Importe</span></th>
                             </tr>
                         </thead>
@@ -70,6 +71,21 @@
                                     <td>
                                         <span t-if="payment.date"><span t-field="payment.date"/></span>
                                     </td>
+                                    <td>
+                                        <!-- Mostrar el tipo de cambio si el pago es en ARS y alguna factura asociada es en USD -->
+                                        <t t-set="payment_lines" t-value="payment.move_id.line_ids.filtered(lambda l: l.account_id.account_type in ('asset_receivable', 'liability_payable'))"/>
+                                        <t t-set="reconciliations" t-value="o.env['account.partial.reconcile'].search(['|', ('debit_move_id', 'in', payment_lines.ids), ('credit_move_id', 'in', payment_lines.ids)])"/>
+                                        <t t-set="invoice_currencies" t-value="o.env['res.currency']"/>
+                                        <t t-foreach="reconciliations" t-as="rec">
+                                            <t t-set="move" t-value="rec.credit_move_id.move_id if rec.debit_move_id in payment_lines else rec.debit_move_id.move_id"/>
+                                            <t t-if="move.is_invoice()">
+                                                <t t-set="invoice_currencies" t-value="invoice_currencies | move.currency_id"/>
+                                            </t>
+                                        </t>
+                                        <t t-if="payment.currency_id.name == 'ARS' and 'USD' in invoice_currencies.mapped('name')">
+                                            <span t-out="'%.2f' % payment.currency_rate"/> ARS/USD
+                                        </t>
+                                    </td>
                                     <td class="text-right o_price_total">
                                         <span t-field="payment.amount" t-options="{'widget': 'monetary', 'display_currency': payment.currency_id}"/>
                                     </td>
@@ -78,7 +94,7 @@
                         </tbody>
                         <tfoot>
                             <tr>
-                                <td colspan="4"><strong><span>Total Pagado</span></strong></td>
+                                <td colspan="5"><strong><span>Total Pagado</span></strong></td>
                                 <td class="text-right">
                                     <strong>
                                         <span t-out="sum(p.amount for p in payments)" t-options="{'widget': 'monetary', 'display_currency': currency}"/>
@@ -89,6 +105,33 @@
                     </table>
                     <br/>
                 </t>
+                <!-- Nueva tabla para retenciones -->
+                <t t-set="withholdings" t-value="o.payment_ids.mapped('l10n_ar_withholding_line_ids')"/>
+                <table class="table table-sm o_main_table" name="withholdings_table" t-if="withholdings">
+                    <thead>
+                        <tr>
+                            <th><span>Recibo de Retención</span></th>
+                            <th><span>Impuesto</span></th>
+                            <th class="text-right"><span>Monto Retenido</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="withholdings" t-as="withholding">
+                            <tr>
+                                <td>
+                                    <span t-field="withholding.name"/>
+                                </td>
+                                <td>
+                                    <span t-field="withholding.tax_id.name"/>
+                                </td>
+                                <td class="text-right o_price_total">
+                                    <span t-field="withholding.amount" t-options="{'widget': 'monetary', 'display_currency': withholding.currency_id}"/>
+                                </td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+                <br/>
                 <table class="table table-sm o_main_table" name="invoices_table" t-if="o.move_ids">
                     <thead>
                         <tr>
