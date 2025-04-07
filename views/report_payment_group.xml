@@ -1,0 +1,107 @@
+<odoo>
+    <template id="report_payment_group_receipt_document" name="Grouped Payment Receipt">
+        <t t-call="web.external_layout">
+            <t t-set="o" t-value="o"/>
+            <t t-set="partner" t-value="o.partner_id"/>
+            <t t-set="company" t-value="o.company_id"/>
+            <t t-set="lang" t-value="partner.lang or company.partner_id.lang"/>
+            <t t-set="custom_header" t-value="'l10n_ar.custom_header'"/>
+            <t t-set="report_date" t-value="o.payment_date"/>
+            <t t-set="document_letter" t-value="'X'"/>
+            <t t-set="document_legend" t-value="'Doc. no válido como factura'"/>
+            <t t-set="report_number" t-value="'REC-' + o.payment_date.strftime('%Y%m%d')"/>
+            <t t-set="report_name" t-value="o.payment_ids[0].payment_type == 'outbound' and 'Orden de pago' or 'Recibo'"/>
+            <t t-set="header_address" t-value="company.partner_id"/>
+
+            <div class="page">
+                <div id="informations" class="row mt8 mb8">
+                    <div class="col-6">
+                        <strong><span t-out="o.payment_ids[0].payment_type == 'outbound' and 'Proveedor: ' or 'Cliente: '"/></strong>
+                        <span t-field="partner.commercial_partner_id.name"/>
+                        <br/>
+                        <span t-out="partner" t-options="{'widget': 'contact', 'fields': ['address'], 'no_marker': True, 'no_tag_br': True}"/>
+                        <br/>
+                        <strong>VAT Cond: </strong><span t-field="partner.l10n_ar_afip_responsibility_type_id"/>
+                        <t t-if="partner.vat and partner.l10n_latam_identification_type_id.name">
+                            <br/><strong><t t-out="partner.l10n_latam_identification_type_id.name"/>:</strong>
+                            <span t-out="partner.l10n_ar_formatted_vat or partner.vat"/>
+                        </t>
+                    </div>
+                </div>
+                <br/>
+                <table class="table table-sm o_main_table" name="payments_table">
+                    <thead>
+                        <tr>
+                            <th><span>Pagos</span></th>
+                            <th class="text-right"><span>Importe</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="o.payment_ids" t-as="payment">
+                            <tr>
+                                <td t-if="payment.payment_method_code in ['check_printing', 'manual']">
+                                    <span t-out="'Cheque nro %s' % (payment.l10n_latam_check_number or payment.ref)"/>
+                                    <span t-if="payment.journal_id.bank_id" t-out="' - %s' % (payment.journal_id.bank_id.name)"/>
+                                    <span t-if="payment.payment_method_code == 'check_printing'" t-out="' (%s)' % (payment.payment_method_id.name)"/>
+                                    <span t-if="payment.payment_date"> - Venc. <span t-field="payment.payment_date"/></span>
+                                </td>
+                                <td t-else="">
+                                    <span t-field="payment.journal_id.name"/>
+                                    <span t-out="' (%s)' % (payment.payment_method_id.name)"/>
+                                </td>
+                                <td class="text-right o_price_total">
+                                    <span t-field="payment.amount" t-options="{'widget': 'monetary', 'display_currency': payment.currency_id}"/>
+                                </td>
+                            </tr>
+                        </t>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td><strong><span>Total Pagado</span></strong></td>
+                            <td class="text-right">
+                                <strong><span t-field="o.amount_total" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></strong>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+                <br/>
+                <table class="table table-sm o_main_table" name="invoices_table">
+                    <thead>
+                        <tr>
+                            <th><span>Facturas Conciliadas</span></th>
+                            <th class="text-center"><span>Fecha</span></th>
+                            <th class="text-right"><span>Importe Total</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="o.move_ids" t-as="move">
+                            <tr>
+                                <td><span t-field="move.name"/></td>
+                                <td class="text-center"><span t-field="move.invoice_date"/></td>
+                                <td class="text-right o_price_total">
+                                    <span t-field="move.amount_total" t-options="{'widget': 'monetary', 'display_currency': move.currency_id}"/>
+                                </td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+            </div>
+        </t>
+    </template>
+
+    <template id="report_payment_group_receipt">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="custom_payment_group_report.report_payment_group_receipt_document"/>
+            </t>
+        </t>
+    </template>
+
+    <record id="action_report_payment_group_receipt" model="ir.actions.report">
+        <field name="name">Grouped Payment Receipt</field>
+        <field name="model">account.payment.group.temp</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">custom_payment_group_report.report_payment_group_receipt</field>
+        <field name="report_file">custom_payment_group_report.report_payment_group_receipt</field>
+    </record>
+</odoo>
