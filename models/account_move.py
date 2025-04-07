@@ -56,7 +56,7 @@ class AccountMove(models.Model):
         # Agrupar pagos por partner y fecha
         grouped_data = {}
         for payment in payment_ids:
-            key = (payment.partner_id.id, payment.payment_date)
+            key = (payment.partner_id.id, payment.date)
             if key not in grouped_data:
                 grouped_data[key] = self.env["account.payment"]
             grouped_data[key] |= payment
@@ -66,11 +66,11 @@ class AccountMove(models.Model):
             [
                 {
                     "partner_id": partner_id,
-                    "payment_date": payment_date,
+                    "date": date,
                     "payment_ids": [(6, 0, payments.ids)],
                     "move_ids": [(6, 0, self.ids)],
                 }
-                for (partner_id, payment_date), payments in grouped_data.items()
+                for (partner_id, date), payments in grouped_data.items()
             ]
         )
 

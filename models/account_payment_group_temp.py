@@ -7,7 +7,7 @@ class AccountPaymentGroupTemp(models.AbstractModel):
     _auto = False
 
     partner_id = fields.Many2one("res.partner", string="Partner", required=True)
-    payment_date = fields.Date(string="Payment Date", required=True)
+    date = fields.Date(string="Payment Date", required=True)
     payment_ids = fields.Many2many("account.payment", string="Payments", required=True)
     move_ids = fields.Many2many("account.move", string="Invoices")
     company_id = fields.Many2one(
