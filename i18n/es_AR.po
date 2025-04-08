@@ -6,321 +6,329 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-08 13:13+0000\n"
-"PO-Revision-Date: 2025-04-08 13:13+0000\n"
+"POT-Creation-Date: 2025-04-08 13:40+0000\n"
+"PO-Revision-Date: 2025-04-08 13:40+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
+"Language: es_AR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: \n"
-"Plural-Forms: \n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. module: grouped_payment_receipt
 #: model_terms:ir.ui.view,arch_db:grouped_payment_receipt.report_payment_receipt_document
 msgid "- Ref:"
-msgstr ""
+msgstr "- Ref:"
 
 #. module: grouped_payment_receipt
 #: model_terms:ir.ui.view,arch_db:grouped_payment_receipt.report_payment_receipt_document
 msgid ""
 "<br/>\n"
-"                        <strong>VAT Cond: </strong>"
+"                        <strong>VAT Condition: </strong>"
 msgstr ""
+"<br/>\n"
+"                        <strong>Condición de IVA: </strong>"
 
 #. module: grouped_payment_receipt
 #: model_terms:ir.ui.view,arch_db:grouped_payment_receipt.report_payment_receipt_document
-msgid "<span> - Pago a cuenta</span>"
-msgstr ""
+msgid "<span> - Payment on Account</span>"
+msgstr "<span> - Pago a cuenta</span>"
 
 #. module: grouped_payment_receipt
 #: model_terms:ir.ui.view,arch_db:grouped_payment_receipt.report_payment_receipt_document
-msgid "<span>Diario</span>"
-msgstr ""
+msgid "<span>Amount</span>"
+msgstr "<span>Importe</span>"
 
 #. module: grouped_payment_receipt
 #: model_terms:ir.ui.view,arch_db:grouped_payment_receipt.report_payment_receipt_document
-msgid "<span>Facturas Conciliadas</span>"
-msgstr ""
+msgid "<span>Date</span>"
+msgstr "<span>Fecha</span>"
 
 #. module: grouped_payment_receipt
 #: model_terms:ir.ui.view,arch_db:grouped_payment_receipt.report_payment_receipt_document
-msgid "<span>Fecha</span>"
-msgstr ""
+msgid "<span>Details</span>"
+msgstr "<span>Detalles</span>"
 
 #. module: grouped_payment_receipt
 #: model_terms:ir.ui.view,arch_db:grouped_payment_receipt.report_payment_receipt_document
-msgid "<span>Importe Total</span>"
-msgstr ""
+msgid "<span>Exchange Rate</span>"
+msgstr "<span>Tipo de Cambio</span>"
 
 #. module: grouped_payment_receipt
 #: model_terms:ir.ui.view,arch_db:grouped_payment_receipt.report_payment_receipt_document
-msgid "<span>Importe</span>"
-msgstr ""
+msgid "<span>Journal</span>"
+msgstr "<span>Diario</span>"
 
 #. module: grouped_payment_receipt
 #: model_terms:ir.ui.view,arch_db:grouped_payment_receipt.report_payment_receipt_document
-msgid "<span>Impuesto</span>"
-msgstr ""
+msgid "<span>Outstanding Balance</span>"
+msgstr "<span>Saldo Pendiente</span>"
 
 #. module: grouped_payment_receipt
 #: model_terms:ir.ui.view,arch_db:grouped_payment_receipt.report_payment_receipt_document
-msgid "<span>Monto Retenido</span>"
-msgstr ""
+msgid "<span>Reconciled Invoices</span>"
+msgstr "<span>Facturas Conciliadas</span>"
 
 #. module: grouped_payment_receipt
 #: model_terms:ir.ui.view,arch_db:grouped_payment_receipt.report_payment_receipt_document
-msgid "<span>Recibo de Retención</span>"
-msgstr ""
+msgid "<span>Reference</span>"
+msgstr "<span>Referencia</span>"
 
 #. module: grouped_payment_receipt
 #: model_terms:ir.ui.view,arch_db:grouped_payment_receipt.report_payment_receipt_document
-msgid "<span>Referencia</span>"
-msgstr ""
+msgid "<span>Tax</span>"
+msgstr "<span>Impuesto</span>"
 
 #. module: grouped_payment_receipt
 #: model_terms:ir.ui.view,arch_db:grouped_payment_receipt.report_payment_receipt_document
-msgid "<span>Saldo Pendiente</span>"
-msgstr ""
+msgid "<span>Total Amount</span>"
+msgstr "<span>Importe Total</span>"
 
 #. module: grouped_payment_receipt
 #: model_terms:ir.ui.view,arch_db:grouped_payment_receipt.report_payment_receipt_document
-msgid "<span>Tipo de Cambio</span>"
-msgstr ""
+msgid "<span>Withheld Amount</span>"
+msgstr "<span>Monto Retenido</span>"
 
 #. module: grouped_payment_receipt
 #: model_terms:ir.ui.view,arch_db:grouped_payment_receipt.report_payment_receipt_document
-msgid "<strong><span>Total Pagado</span></strong>"
-msgstr ""
+msgid "<span>Withholding Receipt</span>"
+msgstr "<span>Recibo de Retención</span>"
 
 #. module: grouped_payment_receipt
 #: model_terms:ir.ui.view,arch_db:grouped_payment_receipt.report_payment_receipt_document
-msgid "<strong><span>Total Saldo Pendiente</span></strong>"
-msgstr ""
+msgid "<strong><span>Total Outstanding Balance</span></strong>"
+msgstr "<strong><span>Total Saldo Pendiente</span></strong>"
+
+#. module: grouped_payment_receipt
+#: model_terms:ir.ui.view,arch_db:grouped_payment_receipt.report_payment_receipt_document
+msgid "<strong><span>Total Paid</span></strong>"
+msgstr "<strong><span>Total Pagado</span></strong>"
 
 #. module: grouped_payment_receipt
 #: model_terms:ir.ui.view,arch_db:grouped_payment_receipt.report_payment_receipt_document
 msgid "ARS/USD"
-msgstr ""
+msgstr "ARS/USD"
 
 #. module: grouped_payment_receipt
 #: model:ir.model.fields,field_description:grouped_payment_receipt.field_account_payment_receipt__message_needaction
 msgid "Action Needed"
-msgstr ""
+msgstr "Acción Requerida"
 
 #. module: grouped_payment_receipt
 #: model:ir.model.fields,field_description:grouped_payment_receipt.field_account_payment_receipt__activity_ids
 msgid "Activities"
-msgstr ""
+msgstr "Actividades"
 
 #. module: grouped_payment_receipt
 #: model:ir.model.fields,field_description:grouped_payment_receipt.field_account_payment_receipt__activity_exception_decoration
 msgid "Activity Exception Decoration"
-msgstr ""
+msgstr "Decoración de Excepción de Actividad"
 
 #. module: grouped_payment_receipt
 #: model:ir.model.fields,field_description:grouped_payment_receipt.field_account_payment_receipt__activity_state
 msgid "Activity State"
-msgstr ""
+msgstr "Estado de la Actividad"
 
 #. module: grouped_payment_receipt
 #: model:ir.model.fields,field_description:grouped_payment_receipt.field_account_payment_receipt__activity_type_icon
 msgid "Activity Type Icon"
-msgstr ""
+msgstr "Ícono del Tipo de Actividad"
 
 #. module: grouped_payment_receipt
 #: model:ir.model.fields,field_description:grouped_payment_receipt.field_account_payment_receipt__message_attachment_count
 msgid "Attachment Count"
-msgstr ""
+msgstr "Cantidad de Adjuntos"
 
 #. module: grouped_payment_receipt
 #: model:ir.model.fields.selection,name:grouped_payment_receipt.selection__account_payment_receipt__state__cancelled
 msgid "Cancelled"
-msgstr ""
+msgstr "Cancelado"
 
 #. module: grouped_payment_receipt
 #: model:ir.model.fields,field_description:grouped_payment_receipt.field_account_payment_receipt__company_id
 msgid "Company"
-msgstr ""
+msgstr "Compañía"
 
 #. module: grouped_payment_receipt
 #: model:ir.model.fields,field_description:grouped_payment_receipt.field_account_payment_receipt__create_uid
 msgid "Created by"
-msgstr ""
+msgstr "Creado por"
 
 #. module: grouped_payment_receipt
 #: model:ir.model.fields,field_description:grouped_payment_receipt.field_account_payment_receipt__create_date
 msgid "Created on"
-msgstr ""
+msgstr "Creado el"
 
 #. module: grouped_payment_receipt
 #: model:ir.model.fields,field_description:grouped_payment_receipt.field_account_payment_receipt__currency_id
 msgid "Currency"
-msgstr ""
+msgstr "Moneda"
 
 #. module: grouped_payment_receipt
 #: model:ir.model.fields,field_description:grouped_payment_receipt.field_account_payment_receipt__date
 msgid "Date"
-msgstr ""
+msgstr "Fecha"
 
 #. module: grouped_payment_receipt
 #: model:ir.model.fields,field_description:grouped_payment_receipt.field_account_payment_receipt__display_name
 msgid "Display Name"
-msgstr ""
+msgstr "Nombre a Mostrar"
 
 #. module: grouped_payment_receipt
 #: model:ir.model.fields.selection,name:grouped_payment_receipt.selection__account_payment_receipt__state__draft
 msgid "Draft"
-msgstr ""
+msgstr "Borrador"
 
 #. module: grouped_payment_receipt
 #: model:ir.model.fields,field_description:grouped_payment_receipt.field_account_payment_receipt__message_follower_ids
 msgid "Followers"
-msgstr ""
+msgstr "Seguidores"
 
 #. module: grouped_payment_receipt
 #: model:ir.model.fields,field_description:grouped_payment_receipt.field_account_payment_receipt__message_partner_ids
 msgid "Followers (Partners)"
-msgstr ""
+msgstr "Seguidores (Contactos)"
 
 #. module: grouped_payment_receipt
 #: model:ir.model.fields,help:grouped_payment_receipt.field_account_payment_receipt__activity_type_icon
 msgid "Font awesome icon e.g. fa-tasks"
-msgstr ""
+msgstr "Ícono de Font Awesome, por ejemplo, fa-tasks"
 
 #. module: grouped_payment_receipt
 #: model:ir.actions.server,name:grouped_payment_receipt.action_server_generate_grouped_payment_receipt
 msgid "Generate Grouped Payment Receipt"
-msgstr ""
+msgstr "Generar Recibo de Pago Agrupado"
 
 #. module: grouped_payment_receipt
 #: model:ir.actions.report,name:grouped_payment_receipt.action_report_payment_receipt
 #: model:ir.model,name:grouped_payment_receipt.model_account_payment_receipt
 msgid "Grouped Payment Receipt"
-msgstr ""
+msgstr "Recibo de Pago Agrupado"
 
 #. module: grouped_payment_receipt
 #: model:ir.actions.act_window,name:grouped_payment_receipt.action_account_payment_receipt
 #: model:ir.ui.menu,name:grouped_payment_receipt.menu_account_payment_receipt_payables
 #: model:ir.ui.menu,name:grouped_payment_receipt.menu_account_payment_receipt_receivables
 msgid "Grouped Payment Receipts"
-msgstr ""
+msgstr "Recibos de Pago Agrupados"
 
 #. module: grouped_payment_receipt
 #: model:ir.model.fields,field_description:grouped_payment_receipt.field_account_payment_receipt__has_message
 msgid "Has Message"
-msgstr ""
+msgstr "Tiene Mensaje"
 
 #. module: grouped_payment_receipt
 #: model:ir.model.fields,field_description:grouped_payment_receipt.field_account_payment_receipt__id
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: grouped_payment_receipt
 #: model:ir.model.fields,field_description:grouped_payment_receipt.field_account_payment_receipt__activity_exception_icon
 msgid "Icon"
-msgstr ""
+msgstr "Ícono"
 
 #. module: grouped_payment_receipt
 #: model:ir.model.fields,help:grouped_payment_receipt.field_account_payment_receipt__activity_exception_icon
 msgid "Icon to indicate an exception activity."
-msgstr ""
+msgstr "Ícono para indicar una actividad de excepción."
 
 #. module: grouped_payment_receipt
 #: model:ir.model.fields,help:grouped_payment_receipt.field_account_payment_receipt__message_needaction
 msgid "If checked, new messages require your attention."
-msgstr ""
+msgstr "Si está marcado, hay nuevos mensajes que requieren tu atención."
 
 #. module: grouped_payment_receipt
 #: model:ir.model.fields,help:grouped_payment_receipt.field_account_payment_receipt__message_has_error
 #: model:ir.model.fields,help:grouped_payment_receipt.field_account_payment_receipt__message_has_sms_error
 msgid "If checked, some messages have a delivery error."
-msgstr ""
+msgstr "Si está marcado, algunos mensajes tienen un error de entrega."
 
 #. module: grouped_payment_receipt
 #: model:ir.model.fields,field_description:grouped_payment_receipt.field_account_payment_receipt__move_ids
 #: model_terms:ir.ui.view,arch_db:grouped_payment_receipt.view_account_payment_receipt_form
 msgid "Invoices"
-msgstr ""
+msgstr "Facturas"
 
 #. module: grouped_payment_receipt
 #: model:ir.model.fields,field_description:grouped_payment_receipt.field_account_payment_receipt__message_is_follower
 msgid "Is Follower"
-msgstr ""
+msgstr "Es Seguidor"
 
 #. module: grouped_payment_receipt
 #: model:ir.model.fields,field_description:grouped_payment_receipt.field_account_payment_receipt__write_uid
 msgid "Last Updated by"
-msgstr ""
+msgstr "Última Actualización por"
 
 #. module: grouped_payment_receipt
 #: model:ir.model.fields,field_description:grouped_payment_receipt.field_account_payment_receipt__write_date
 msgid "Last Updated on"
-msgstr ""
+msgstr "Última Actualización el"
 
 #. module: grouped_payment_receipt
 #: model:ir.model.fields,field_description:grouped_payment_receipt.field_account_payment_receipt__message_has_error
 msgid "Message Delivery error"
-msgstr ""
+msgstr "Error de Entrega de Mensaje"
 
 #. module: grouped_payment_receipt
 #: model:ir.model.fields,field_description:grouped_payment_receipt.field_account_payment_receipt__message_ids
 msgid "Messages"
-msgstr ""
+msgstr "Mensajes"
 
 #. module: grouped_payment_receipt
 #: model:ir.model.fields,field_description:grouped_payment_receipt.field_account_payment_receipt__my_activity_date_deadline
 msgid "My Activity Deadline"
-msgstr ""
+msgstr "Fecha Límite de Mi Actividad"
 
 #. module: grouped_payment_receipt
 #: model:ir.model.fields,field_description:grouped_payment_receipt.field_account_payment_receipt__activity_calendar_event_id
 msgid "Next Activity Calendar Event"
-msgstr ""
+msgstr "Próximo Evento de Calendario de Actividad"
 
 #. module: grouped_payment_receipt
 #: model:ir.model.fields,field_description:grouped_payment_receipt.field_account_payment_receipt__activity_date_deadline
 msgid "Next Activity Deadline"
-msgstr ""
+msgstr "Fecha Límite de la Próxima Actividad"
 
 #. module: grouped_payment_receipt
 #: model:ir.model.fields,field_description:grouped_payment_receipt.field_account_payment_receipt__activity_summary
 msgid "Next Activity Summary"
-msgstr ""
+msgstr "Resumen de la Próxima Actividad"
 
 #. module: grouped_payment_receipt
 #: model:ir.model.fields,field_description:grouped_payment_receipt.field_account_payment_receipt__activity_type_id
 msgid "Next Activity Type"
-msgstr ""
+msgstr "Tipo de la Próxima Actividad"
 
 #. module: grouped_payment_receipt
 #: model:ir.model.fields,field_description:grouped_payment_receipt.field_account_payment_receipt__message_needaction_counter
 msgid "Number of Actions"
-msgstr ""
+msgstr "Cantidad de Acciones"
 
 #. module: grouped_payment_receipt
 #: model:ir.model.fields,field_description:grouped_payment_receipt.field_account_payment_receipt__message_has_error_counter
 msgid "Number of errors"
-msgstr ""
+msgstr "Cantidad de Errores"
 
 #. module: grouped_payment_receipt
 #: model:ir.model.fields,help:grouped_payment_receipt.field_account_payment_receipt__message_needaction_counter
 msgid "Number of messages requiring action"
-msgstr ""
+msgstr "Cantidad de mensajes que requieren acción"
 
 #. module: grouped_payment_receipt
 #: model:ir.model.fields,help:grouped_payment_receipt.field_account_payment_receipt__message_has_error_counter
 msgid "Number of messages with delivery error"
-msgstr ""
+msgstr "Cantidad de mensajes con error de entrega"
 
 #. module: grouped_payment_receipt
 #: model:ir.model.fields,field_description:grouped_payment_receipt.field_account_payment_receipt__payment_names
 msgid "Original Payments"
-msgstr ""
+msgstr "Pagos Originales"
 
 #. module: grouped_payment_receipt
 #: model:ir.model.fields,field_description:grouped_payment_receipt.field_account_payment_receipt__partner_id
 msgid "Partner"
-msgstr ""
+msgstr "Contacto"
 
 #. module: grouped_payment_receipt
 #: model:ir.model,name:grouped_payment_receipt.model_account_payment
@@ -332,37 +340,37 @@ msgstr "Pagos"
 #. module: grouped_payment_receipt
 #: model:ir.model.fields.selection,name:grouped_payment_receipt.selection__account_payment_receipt__state__posted
 msgid "Posted"
-msgstr ""
+msgstr "Publicado"
 
 #. module: grouped_payment_receipt
 #: model_terms:ir.ui.view,arch_db:grouped_payment_receipt.view_account_payment_receipt_tree
 msgid "Print Receipt"
-msgstr ""
+msgstr "Imprimir Recibo"
 
 #. module: grouped_payment_receipt
 #: model:ir.model.fields,field_description:grouped_payment_receipt.field_account_payment_receipt__rating_ids
 msgid "Ratings"
-msgstr ""
+msgstr "Calificaciones"
 
 #. module: grouped_payment_receipt
 #: model:ir.model.fields,field_description:grouped_payment_receipt.field_account_payment_receipt__name
 msgid "Receipt Number"
-msgstr ""
+msgstr "Número de Recibo"
 
 #. module: grouped_payment_receipt
 #: model:ir.model.fields,field_description:grouped_payment_receipt.field_account_payment_receipt__activity_user_id
 msgid "Responsible User"
-msgstr ""
+msgstr "Usuario Responsable"
 
 #. module: grouped_payment_receipt
 #: model:ir.model.fields,field_description:grouped_payment_receipt.field_account_payment_receipt__message_has_sms_error
 msgid "SMS Delivery error"
-msgstr ""
+msgstr "Error de Entrega de SMS"
 
 #. module: grouped_payment_receipt
 #: model:ir.model.fields,field_description:grouped_payment_receipt.field_account_payment_receipt__state
 msgid "Status"
-msgstr ""
+msgstr "Estado"
 
 #. module: grouped_payment_receipt
 #: model:ir.model.fields,help:grouped_payment_receipt.field_account_payment_receipt__activity_state
@@ -372,18 +380,22 @@ msgid ""
 "Today: Activity date is today\n"
 "Planned: Future activities."
 msgstr ""
+"Estado basado en actividades\n"
+"Atrasado: La fecha de vencimiento ya pasó\n"
+"Hoy: La fecha de la actividad es hoy\n"
+"Planificado: Actividades futuras."
 
 #. module: grouped_payment_receipt
 #: model:ir.model.fields,help:grouped_payment_receipt.field_account_payment_receipt__activity_exception_decoration
 msgid "Type of the exception activity on record."
-msgstr ""
+msgstr "Tipo de la actividad de excepción en el registro."
 
 #. module: grouped_payment_receipt
 #: model:ir.model.fields,field_description:grouped_payment_receipt.field_account_payment_receipt__website_message_ids
 msgid "Website Messages"
-msgstr ""
+msgstr "Mensajes del Sitio Web"
 
 #. module: grouped_payment_receipt
 #: model:ir.model.fields,help:grouped_payment_receipt.field_account_payment_receipt__website_message_ids
 msgid "Website communication history"
-msgstr ""
+msgstr "Historial de comunicación del sitio web"
