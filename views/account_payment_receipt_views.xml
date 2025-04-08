@@ -1,5 +1,4 @@
 <odoo>
-    <!-- Vista Tree -->
     <record id="view_account_payment_receipt_tree" model="ir.ui.view">
         <field name="name">account.payment.receipt.tree</field>
         <field name="model">account.payment.receipt</field>
@@ -10,12 +9,17 @@
                 <field name="partner_id"/>
                 <field name="payment_names"/>
                 <field name="state"/>
-                <button name="action_print_receipt" string="Print Receipt" type="object" icon="fa-print" class="oe_highlight"/>
+                <button
+                    name="action_print_receipt"
+                    string="Print Receipt"
+                    type="object"
+                    icon="fa-print"
+                    class="oe_highlight"
+                />
             </tree>
         </field>
     </record>
 
-    <!-- Vista Form -->
     <record id="view_account_payment_receipt_form" model="ir.ui.view">
         <field name="name">account.payment.receipt.form</field>
         <field name="model">account.payment.receipt</field>
@@ -49,7 +53,6 @@
         </field>
     </record>
 
-    <!-- Acción para Abrir la Vista -->
     <record id="action_account_payment_receipt" model="ir.actions.act_window">
         <field name="name">Grouped Payment Receipts</field>
         <field name="res_model">account.payment.receipt</field>
@@ -57,19 +60,19 @@
         <field name="domain">[('state', '=', 'posted')]</field>
     </record>
 
-    <!-- Menú para Clientes (Receivables) -->
     <menuitem
         id="menu_account_payment_receipt_receivables"
         name="Grouped Payment Receipts"
         parent="account.menu_finance_receivables"
         action="action_account_payment_receipt"
-        sequence="20"/>
+        sequence="20"
+    />
 
-    <!-- Menú para Proveedores (Payables) -->
     <menuitem
         id="menu_account_payment_receipt_payables"
         name="Grouped Payment Receipts"
         parent="account.menu_finance_payables"
         action="action_account_payment_receipt"
-        sequence="20"/>
+        sequence="20"
+    />
 </odoo>

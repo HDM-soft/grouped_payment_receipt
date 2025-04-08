@@ -8,40 +8,48 @@
             <t t-set="custom_header" t-value="'l10n_ar.custom_header'"/>
             <t t-set="report_date" t-value="o.date"/>
             <t t-set="document_letter" t-value="'X'"/>
-            <t t-set="document_legend" t-value="'Doc. no válido como factura'"/>
+            <t t-set="document_legend" t-value="'Document not valid as invoice'"/>
             <t t-set="report_number" t-value="o.name"/>
-            <t t-set="report_name" t-value="o.payment_ids[0].payment_type == 'outbound' and 'Orden de pago' or 'Recibo'"/>
+            <t t-set="report_name" t-value="o.payment_ids[0].payment_type == 'outbound' and 'Payment Order' or 'Receipt'"/>
             <t t-set="header_address" t-value="company.partner_id"/>
 
             <div class="page">
                 <div id="informations" class="row mt8 mb8">
                     <div class="col-6">
-                        <strong><span t-out="o.payment_ids[0].payment_type == 'outbound' and 'Proveedor: ' or 'Cliente: '"/></strong>
+                        <strong>
+                            <span t-out="o.payment_ids[0].payment_type == 'outbound' and 'Vendor: ' or 'Customer: '"/>
+                        </strong>
                         <span t-field="partner.commercial_partner_id.name"/>
                         <br/>
-                        <span t-out="partner" t-options="{'widget': 'contact', 'fields': ['address'], 'no_marker': True, 'no_tag_br': True}"/>
+                        <span
+                            t-out="partner"
+                            t-options="{'widget': 'contact', 'fields': ['address'], 'no_marker': True, 'no_tag_br': True}"
+                        />
                         <br/>
-                        <strong>VAT Cond: </strong><span t-field="partner.l10n_ar_afip_responsibility_type_id"/>
+                        <strong>VAT Condition: </strong>
+                        <span t-field="partner.l10n_ar_afip_responsibility_type_id"/>
                         <t t-if="partner.vat and partner.l10n_latam_identification_type_id.name">
-                            <br/><strong><t t-out="partner.l10n_latam_identification_type_id.name"/>:</strong>
+                            <br/>
+                            <strong>
+                                <t t-out="partner.l10n_latam_identification_type_id.name"/>:
+                            </strong>
                             <span t-out="partner.l10n_ar_formatted_vat or partner.vat"/>
                         </t>
                     </div>
                 </div>
                 <br/>
-                <!-- Usar el método get_payments_by_currency para obtener los pagos agrupados -->
                 <t t-foreach="o.get_payments_by_currency()" t-as="currency_group">
                     <t t-set="currency" t-value="currency_group[0]"/>
                     <t t-set="payments" t-value="currency_group[1]"/>
                     <table class="table table-sm o_main_table" name="payments_table">
                         <thead>
                             <tr>
-                                <th><span>Referencia</span></th>
-                                <th><span>Diario</span></th>
-                                <th><span>Referencia</span></th>
-                                <th><span>Fecha</span></th>
-                                <th><span>Tipo de Cambio</span></th>
-                                <th class="text-right"><span>Importe</span></th>
+                                <th><span>Reference</span></th>
+                                <th><span>Journal</span></th>
+                                <th><span>Details</span></th>
+                                <th><span>Date</span></th>
+                                <th><span>Exchange Rate</span></th>
+                                <th class="text-right"><span>Amount</span></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -55,35 +63,58 @@
                                     </td>
                                     <td>
                                         <t t-if="payment.l10n_latam_check_number">
-                                            <span t-out="'Cheque nro %s' % (payment.l10n_latam_check_number)"/>
-                                            <span t-if="payment.journal_id.bank_id" t-out="' - %s' % (payment.journal_id.bank_id.name)"/>
+                                            <span t-out="'Check No. %s' % (payment.l10n_latam_check_number)"/>
+                                            <span
+                                                t-if="payment.journal_id.bank_id"
+                                                t-out="' - %s' % (payment.journal_id.bank_id.name)"
+                                            />
                                         </t>
                                         <t t-else="">
-                                            <span t-if="payment.ref"> - Ref: <span t-field="payment.ref"/></span>
-                                            <span t-out="' (%s)' % (payment.payment_method_id.name)"/>
-                                            <t t-set="payment_lines" t-value="payment.move_id.line_ids.filtered(lambda l: l.account_id.account_type in ('asset_receivable', 'liability_payable'))"/>
-                                            <t t-set="reconciliations" t-value="o.env['account.partial.reconcile'].search(['|', ('debit_move_id', 'in', payment_lines.ids), ('credit_move_id', 'in', payment_lines.ids)])"/>
+                                            <span t-if="payment.ref">
+                                                - Ref: <span t-field="payment.ref"/>
+                                            </span>
+                                            <span
+                                                t-out="' (%s)' % (payment.payment_method_id.name)"
+                                            />
+                                            <t t-set="payment_lines"
+                                               t-value="payment.move_id.line_ids.filtered(lambda l: l.account_id.account_type in ('asset_receivable', 'liability_payable'))"
+                                            />
+                                            <t t-set="reconciliations"
+                                               t-value="o.env['account.partial.reconcile'].search(['|', ('debit_move_id', 'in', payment_lines.ids), ('credit_move_id', 'in', payment_lines.ids)])"
+                                            />
                                             <t t-if="not reconciliations">
-                                                <span> - Pago a cuenta</span>
+                                                <span> - Payment on Account</span>
                                             </t>
                                         </t>
                                     </td>
                                     <td>
-                                        <span t-if="payment.date"><span t-field="payment.date"/></span>
+                                        <span t-if="payment.date">
+                                            <span t-field="payment.date"/>
+                                        </span>
                                     </td>
                                     <td>
-                                        <!-- Mostrar el tipo de cambio si el pago es en ARS y alguna factura asociada es en USD -->
-                                        <t t-set="payment_lines" t-value="payment.move_id.line_ids.filtered(lambda l: l.account_id.account_type in ('asset_receivable', 'liability_payable'))"/>
-                                        <t t-set="reconciliations" t-value="o.env['account.partial.reconcile'].search(['|', ('debit_move_id', 'in', payment_lines.ids), ('credit_move_id', 'in', payment_lines.ids)])"/>
-                                        <t t-set="invoice_currencies" t-value="o.env['res.currency']"/>
+                                        <t t-set="payment_lines"
+                                           t-value="payment.move_id.line_ids.filtered(lambda l: l.account_id.account_type in ('asset_receivable', 'liability_payable'))"
+                                        />
+                                        <t t-set="reconciliations"
+                                           t-value="o.env['account.partial.reconcile'].search(['|', ('debit_move_id', 'in', payment_lines.ids), ('credit_move_id', 'in', payment_lines.ids)])"
+                                        />
+                                        <t t-set="invoice_currencies"
+                                           t-value="o.env['res.currency']"
+                                        />
                                         <t t-set="currency_rate" t-value="0.0"/>
                                         <t t-foreach="reconciliations" t-as="rec">
-                                            <t t-set="move" t-value="rec.credit_move_id.move_id if rec.debit_move_id in payment_lines else rec.debit_move_id.move_id"/>
+                                            <t t-set="move"
+                                               t-value="rec.credit_move_id.move_id if rec.debit_move_id in payment_lines else rec.debit_move_id.move_id"
+                                            />
                                             <t t-if="move.is_invoice()">
-                                                <t t-set="invoice_currencies" t-value="invoice_currencies | move.currency_id"/>
-                                                <!-- Obtener el computed_currency_rate de la factura -->
+                                                <t t-set="invoice_currencies"
+                                                   t-value="invoice_currencies | move.currency_id"
+                                                />
                                                 <t t-if="payment.currency_id.name == 'ARS' and move.currency_id.name == 'USD'">
-                                                    <t t-set="currency_rate" t-value="move.computed_currency_rate"/>
+                                                    <t t-set="currency_rate"
+                                                       t-value="move.computed_currency_rate"
+                                                    />
                                                 </t>
                                             </t>
                                         </t>
@@ -92,17 +123,25 @@
                                         </t>
                                     </td>
                                     <td class="text-right o_price_total">
-                                        <span t-field="payment.amount" t-options="{'widget': 'monetary', 'display_currency': payment.currency_id}"/>
+                                        <span
+                                            t-field="payment.amount"
+                                            t-options="{'widget': 'monetary', 'display_currency': payment.currency_id}"
+                                        />
                                     </td>
                                 </tr>
                             </t>
                         </tbody>
                         <tfoot>
                             <tr>
-                                <td colspan="5"><strong><span>Total Pagado</span></strong></td>
+                                <td colspan="5">
+                                    <strong><span>Total Paid</span></strong>
+                                </td>
                                 <td class="text-right">
                                     <strong>
-                                        <span t-out="sum(p.amount for p in payments)" t-options="{'widget': 'monetary', 'display_currency': currency}"/>
+                                        <span
+                                            t-out="sum(p.amount for p in payments)"
+                                            t-options="{'widget': 'monetary', 'display_currency': currency}"
+                                        />
                                     </strong>
                                 </td>
                             </tr>
@@ -110,14 +149,19 @@
                     </table>
                     <br/>
                 </t>
-                <!-- Nueva tabla para retenciones -->
-                <t t-set="withholdings" t-value="o.payment_ids.mapped('l10n_ar_withholding_line_ids')"/>
-                <table class="table table-sm o_main_table" name="withholdings_table" t-if="withholdings">
+                <t t-set="withholdings"
+                   t-value="o.payment_ids.mapped('l10n_ar_withholding_line_ids')"
+                />
+                <table
+                    class="table table-sm o_main_table"
+                    name="withholdings_table"
+                    t-if="withholdings"
+                >
                     <thead>
                         <tr>
-                            <th><span>Recibo de Retención</span></th>
-                            <th><span>Impuesto</span></th>
-                            <th class="text-right"><span>Monto Retenido</span></th>
+                            <th><span>Withholding Receipt</span></th>
+                            <th><span>Tax</span></th>
+                            <th class="text-right"><span>Withheld Amount</span></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -130,41 +174,65 @@
                                     <span t-field="withholding.tax_id.name"/>
                                 </td>
                                 <td class="text-right o_price_total">
-                                    <span t-field="withholding.amount" t-options="{'widget': 'monetary', 'display_currency': withholding.currency_id}"/>
+                                    <span
+                                        t-field="withholding.amount"
+                                        t-options="{'widget': 'monetary', 'display_currency': withholding.currency_id}"
+                                    />
                                 </td>
                             </tr>
                         </t>
                     </tbody>
                 </table>
                 <br/>
-                <table class="table table-sm o_main_table" name="invoices_table" t-if="o.move_ids">
+                <table
+                    class="table table-sm o_main_table"
+                    name="invoices_table"
+                    t-if="o.move_ids"
+                >
                     <thead>
                         <tr>
-                            <th><span>Facturas Conciliadas</span></th>
-                            <th class="text-center"><span>Fecha</span></th>
-                            <th class="text-right"><span>Importe Total</span></th>
-                            <th class="text-right"><span>Saldo Pendiente</span></th>
+                            <th><span>Reconciled Invoices</span></th>
+                            <th class="text-center"><span>Date</span></th>
+                            <th class="text-right"><span>Total Amount</span></th>
+                            <th class="text-right"><span>Outstanding Balance</span></th>
                         </tr>
                     </thead>
                     <tbody>
                         <t t-foreach="o.move_ids.sorted(key=lambda m: m.invoice_date)" t-as="move">
                             <tr>
-                                <td><span t-field="move.name"/></td>
-                                <td class="text-center"><span t-field="move.invoice_date"/></td>
-                                <td class="text-right o_price_total">
-                                    <span t-field="move.amount_total" t-options="{'widget': 'monetary', 'display_currency': move.currency_id}"/>
+                                <td>
+                                    <span t-field="move.name"/>
+                                </td>
+                                <td class="text-center">
+                                    <span t-field="move.invoice_date"/>
                                 </td>
                                 <td class="text-right o_price_total">
-                                    <span t-field="move.amount_residual" t-options="{'widget': 'monetary', 'display_currency': move.currency_id}"/>
+                                    <span
+                                        t-field="move.amount_total"
+                                        t-options="{'widget': 'monetary', 'display_currency': move.currency_id}"
+                                    />
+                                </td>
+                                <td class="text-right o_price_total">
+                                    <span
+                                        t-field="move.amount_residual"
+                                        t-options="{'widget': 'monetary', 'display_currency': move.currency_id}"
+                                    />
                                 </td>
                             </tr>
                         </t>
                     </tbody>
                     <tfoot>
                         <tr>
-                            <td colspan="3"><strong><span>Total Saldo Pendiente</span></strong></td>
+                            <td colspan="3">
+                                <strong><span>Total Outstanding Balance</span></strong>
+                            </td>
                             <td class="text-right">
-                                <strong><span t-out="sum(move.amount_residual for move in o.move_ids)" t-options="{'widget': 'monetary', 'display_currency': o.move_ids[0].currency_id if o.move_ids else o.currency_id}"/></strong>
+                                <strong>
+                                    <span
+                                        t-out="sum(move.amount_residual for move in o.move_ids)"
+                                        t-options="{'widget': 'monetary', 'display_currency': o.move_ids[0].currency_id if o.move_ids else o.currency_id}"
+                                    />
+                                </strong>
                             </td>
                         </tr>
                     </tfoot>

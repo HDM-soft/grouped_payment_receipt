@@ -1,4 +1,4 @@
-from odoo import models, fields, api
+from odoo import api, fields, models
 
 
 class AccountPaymentReceipt(models.Model):
@@ -8,23 +8,51 @@ class AccountPaymentReceipt(models.Model):
     _inherit = ["mail.thread", "mail.activity.mixin"]
 
     name = fields.Char(
-        string="Receipt Number", required=True, copy=False, readonly=True, default="New"
+        string="Receipt Number",
+        required=True,
+        copy=False,
+        readonly=True,
+        default="New",
     )
-    date = fields.Date(string="Date", required=True, default=fields.Date.context_today)
-    partner_id = fields.Many2one("res.partner", string="Partner", required=True)
-    payment_ids = fields.Many2many("account.payment", string="Payments", required=True)
+    date = fields.Date(
+        string="Date",
+        required=True,
+        default=fields.Date.context_today,
+    )
+    partner_id = fields.Many2one(
+        comodel_name="res.partner",
+        string="Partner",
+        required=True,
+    )
+    payment_ids = fields.Many2many(
+        comodel_name="account.payment",
+        string="Payments",
+        required=True,
+    )
     payment_names = fields.Char(
-        string="Original Payments", compute="_compute_payment_names", store=True
+        string="Original Payments",
+        compute="_compute_payment_names",
+        store=True,
     )
-    move_ids = fields.Many2many("account.move", string="Invoices", required=True)
+    move_ids = fields.Many2many(
+        comodel_name="account.move",
+        string="Invoices",
+        required=True,
+    )
     company_id = fields.Many2one(
-        "res.company", string="Company", compute="_compute_company", store=True
+        comodel_name="res.company",
+        string="Company",
+        compute="_compute_company",
+        store=True,
     )
     currency_id = fields.Many2one(
-        "res.currency", string="Currency", compute="_compute_currency", store=True
+        comodel_name="res.currency",
+        string="Currency",
+        compute="_compute_currency",
+        store=True,
     )
     state = fields.Selection(
-        [
+        selection=[
             ("draft", "Draft"),
             ("posted", "Posted"),
             ("cancelled", "Cancelled"),
@@ -58,7 +86,7 @@ class AccountPaymentReceipt(models.Model):
             )
 
     def get_payments_by_currency(self):
-        """Devuelve los pagos agrupados por moneda como una lista de tuplas (currency, payments)."""
+        """Return payments grouped by currency as a list of (currency, payments) tuples."""
         self.ensure_one()
         payments_by_currency = {}
         for payment in self.payment_ids.sorted(
@@ -68,20 +96,22 @@ class AccountPaymentReceipt(models.Model):
             if currency_id not in payments_by_currency:
                 payments_by_currency[currency_id] = []
             payments_by_currency[currency_id].append(payment)
-        # Convertir el diccionario a una lista de tuplas (currency, payments)
+
         result = []
         for currency_id, payments in payments_by_currency.items():
             currency = self.env["res.currency"].browse(currency_id)
             result.append((currency, payments))
         return result
 
-    @api.model
-    def create(self, vals):
-        if vals.get("name", "New") == "New":
-            vals["name"] = (
-                self.env["ir.sequence"].next_by_code("account.payment.receipt") or "New"
-            )
-        return super(AccountPaymentReceipt, self).create(vals)
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            if vals.get("name", "New") == "New":
+                vals["name"] = (
+                    self.env["ir.sequence"].next_by_code("account.payment.receipt")
+                    or "New"
+                )
+        return super().create(vals_list)
 
     def action_post(self):
         self.write({"state": "posted"})
@@ -93,7 +123,7 @@ class AccountPaymentReceipt(models.Model):
         self.write({"state": "draft"})
 
     def action_print_receipt(self):
-        """Reimprime el recibo."""
+        """Print the grouped payment receipt."""
         return self.env.ref(
             "grouped_payment_receipt.action_report_payment_receipt"
         ).report_action(self)

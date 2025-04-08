@@ -1,5 +1,5 @@
 ===========
-Grouped Payment Receipt from Invoices
+Grouped Payment Receipt
 ===========
 
 .. |badge1| image:: https://img.shields.io/badge/maturity-Stable-brightgreen
@@ -14,7 +14,7 @@ Grouped Payment Receipt from Invoices
 
 |badge1| |badge2| |badge3|
 
-This module extends the functionality of Odoo’s accounting module to support the generation of a grouped PDF receipt report for payments reconciled with selected customer or vendor invoices. It allows users to select invoices from the same partner in the invoice tree view and generate a consolidated report detailing the associated payments.
+This module extends the functionality of Odoo’s accounting module to support the generation of a grouped PDF receipt report for selected customer or vendor payments. It allows users to select payments from the same partner in the payment tree view and generate a consolidated report detailing the payments, associated invoices, withholdings, and exchange rates (if applicable).
 
 **Table of contents**
 
@@ -28,22 +28,24 @@ To install this module, you need to:
 
 1. Clone or download the module into your Odoo addons directory.
 2. Update the Odoo module list from the user interface (Settings > Modules > Update Modules List).
-3. Search for "Grouped Payment Receipt from Invoices" in the Apps menu and click "Install".
+3. Search for "Grouped Payment Receipt" in the Apps menu and click "Install".
 
 No additional non-Python dependencies are required.
 
 Usage
 =====
 
-1. Go to **Invoicing > Customer Invoices** or **Invoicing > Vendor Bills**.
-2. Select one or more invoices from the same customer or vendor in the tree view.
-3. Click the "Grouped Payment Receipt" button in the action bar.
+1. Go to **Invoicing > Payments**.
+2. Select one or more payments from the same customer or vendor in the tree view.
+3. Click the "Generate Grouped Payment Receipt" button in the action bar.
 4. A PDF report will be generated, displaying:
    - Partner details (customer or vendor).
-   - A table of reconciled payments grouped by date.
-   - A table of the selected invoices with their dates and total amounts.
+   - A table of selected payments grouped by currency, including payment details, dates, and exchange rates (if the payment currency differs from the invoice currency).
+   - A table of withholdings associated with the payments (if applicable).
+   - A table of reconciled invoices with their dates, total amounts, and outstanding balances.
+5. To view or reprint a previously generated receipt, go to **Invoicing > Receivables > Grouped Payment Receipts** (for customers) or **Invoicing > Payables > Grouped Payment Receipts** (for vendors).
 
-The report title dynamically adjusts to "Recibo" for customer payments or "Orden de pago" for vendor payments.
+The report title dynamically adjusts to "Receipt" for customer payments or "Payment Order" for vendor payments.
 
 Known issues / Roadmap
 ======================
@@ -51,7 +53,8 @@ Known issues / Roadmap
 * **Known Issues**: None identified at this stage.
 * **Roadmap**: 
   - Add optional filters for payment date ranges in the report generation.
-  - Include additional payment details (e.g., withholding taxes) if required by localization.
+  - Include additional payment details (e.g., more detailed withholding tax information) if required by localization.
+  - Add a mechanism to prevent re-grouping of payments already included in a receipt.
 
 Bug Tracker
 ===========
@@ -70,7 +73,7 @@ Authors
 Contributors
 ~~~~~~~~~~~~
 
-* `Be OnlyOne. <https://onlyone.odoo.com/>`_
+* `Be OnlyOne <https://onlyone.odoo.com/>`_
   
   * Matías Bressanello
 

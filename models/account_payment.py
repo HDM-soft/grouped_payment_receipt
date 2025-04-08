@@ -1,4 +1,4 @@
-from odoo import models, fields, api
+from odoo import models, api
 from odoo.exceptions import UserError
 
 
@@ -6,22 +6,24 @@ class AccountPayment(models.Model):
     _inherit = "account.payment"
 
     def action_generate_grouped_payment_receipt(self):
-        """Genera un recibo agrupado a partir de los pagos seleccionados."""
-        # Verificar que todos los pagos sean del mismo partner
+        """Generate a grouped payment receipt from the selected payments.
+
+        Raises:
+            UserError: If payments belong to different partners or if no posted payments are selected.
+        """
+        # Ensure all payments belong to the same partner
         partner_ids = self.mapped("partner_id")
         if len(partner_ids) > 1:
-            raise UserError(
-                "Por favor, selecciona pagos del mismo cliente o proveedor."
-            )
+            raise UserError("Please select payments from the same customer or vendor.")
 
-        # Filtrar solo pagos publicados
-        payments = self.filtered(lambda p: p.state == "posted")
-        if not payments:
-            raise UserError("No hay pagos publicados para generar el recibo.")
+        # Filter only posted payments
+        posted_payments = self.filtered(lambda p: p.state == "posted")
+        if not posted_payments:
+            raise UserError("There are no posted payments to generate the receipt.")
 
-        # Obtener las facturas asociadas a los pagos
-        move_ids = self.env["account.move"]
-        for payment in payments:
+        # Get invoices associated with the payments
+        invoices = self.env["account.move"]
+        for payment in posted_payments:
             payment_lines = payment.move_id.line_ids.filtered(
                 lambda l: l.account_id.account_type
                 in ("asset_receivable", "liability_payable")
@@ -33,30 +35,31 @@ class AccountPayment(models.Model):
                     ("credit_move_id", "in", payment_lines.ids),
                 ]
             )
-            for rec in reconciliations:
-                if rec.debit_move_id in payment_lines:
-                    move = rec.credit_move_id.move_id
-                else:
-                    move = rec.debit_move_id.move_id
-                if move.is_invoice():
-                    move_ids |= move
+            for reconciliation in reconciliations:
+                invoice = (
+                    reconciliation.credit_move_id.move_id
+                    if reconciliation.debit_move_id in payment_lines
+                    else reconciliation.debit_move_id.move_id
+                )
+                if invoice.is_invoice():
+                    invoices |= invoice
 
-        # Agrupar pagos por partner y fecha
+        # Group payments by partner and date
         grouped_data = {}
-        for payment in payments:
+        for payment in posted_payments:
             key = (payment.partner_id.id, payment.date)
             if key not in grouped_data:
                 grouped_data[key] = self.env["account.payment"]
             grouped_data[key] |= payment
 
-        # Crear registros de recibos agrupados
+        # Create grouped payment receipt records
         receipt_records = self.env["account.payment.receipt"].create(
             [
                 {
                     "partner_id": partner_id,
                     "date": payment_date,
                     "payment_ids": [(6, 0, payments.ids)],
-                    "move_ids": [(6, 0, move_ids.ids)],
+                    "move_ids": [(6, 0, invoices.ids)],
                     "state": "posted",
                 }
                 for (partner_id, payment_date), payments in grouped_data.items()
