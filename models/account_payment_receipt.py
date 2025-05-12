@@ -54,11 +54,11 @@ class AccountPaymentReceipt(models.Model):
     state = fields.Selection(
         selection=[
             ("draft", "Draft"),
-            ("posted", "Posted"),
+            ("in-process", "Process"),
             ("cancelled", "Cancelled"),
         ],
         string="Status",
-        default="posted",
+        default="in-process",
         required=True,
     )
 
@@ -97,7 +97,7 @@ class AccountPaymentReceipt(models.Model):
 
         available_payments = self.env['account.payment'].search([
             ('partner_id', '=', self.partner_id.id),
-            ('state', '=', 'posted'),
+            ('state', '=', 'in-process'),
             ('id', 'not in', used_payment_ids),
         ])
 
@@ -153,7 +153,7 @@ class AccountPaymentReceipt(models.Model):
         return super().create(vals_list)
 
     def action_post(self):
-        self.write({"state": "posted"})
+        self.write({"state": "in-process"})
 
     def action_cancel(self):
         self.write({"state": "cancelled"})

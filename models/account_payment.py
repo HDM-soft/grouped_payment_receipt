@@ -17,7 +17,7 @@ class AccountPayment(models.Model):
             raise UserError("Please select payments from the same customer or vendor.")
 
         # Filter only posted payments
-        posted_payments = self.filtered(lambda p: p.state == "posted")
+        posted_payments = self.filtered(lambda p: p.state == "in-process" or "paid")
         if not posted_payments:
             raise UserError("There are no posted payments to generate the receipt.")
 
@@ -60,7 +60,7 @@ class AccountPayment(models.Model):
                     "date": payment_date,
                     "payment_ids": [(6, 0, payments.ids)],
                     "move_ids": [(6, 0, invoices.ids)],
-                    "state": "posted",
+                    "state": "in-process",
                 }
                 for (partner_id, payment_date), payments in grouped_data.items()
             ]
