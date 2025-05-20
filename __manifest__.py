@@ -8,9 +8,9 @@
     "website": "https://onlyone.odoo.com/",
     "license": "AGPL-3",
     "category": "Technical Settings",
-    "version": "17.0.12.11.1",
+    "version": "18.0.12.11.1",
     "development_status": "Production/Stable",
-    "depends": ["account", "l10n_ar"],
+    "depends": ["account", "l10n_ar", 'l10n_latam_check'],
     "data": [
         "security/ir.model.access.csv",
         "data/sequence_data.xml",

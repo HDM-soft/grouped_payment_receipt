@@ -62,16 +62,14 @@
                                         <span t-field="payment.journal_id.name"/>
                                     </td>
                                     <td>
-                                        <t t-if="payment.l10n_latam_check_number">
-                                            <span t-out="'Check No. %s' % (payment.l10n_latam_check_number)"/>
-                                            <span
-                                                t-if="payment.journal_id.bank_id"
-                                                t-out="' - %s' % (payment.journal_id.bank_id.name)"
-                                            />
+                                        <t t-if="payment.l10n_latam_move_check_ids">
+                                            <span t-foreach="payment.l10n_latam_move_check_ids" t-as="check">
+                                                <span t-if="check.check_number">Check No. <t t-out="check.check_number"/></span>
+                                            </span>
                                         </t>
                                         <t t-else="">
-                                            <span t-if="payment.ref">
-                                                - Ref: <span t-field="payment.ref"/>
+                                            <span t-if="payment.name">
+                                                - Ref: <span t-field="payment.name"/>
                                             </span>
                                             <span
                                                 t-out="' (%s)' % (payment.payment_method_id.name)"

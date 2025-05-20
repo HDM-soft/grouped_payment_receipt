@@ -1,9 +1,9 @@
 <odoo>
-    <record id="view_account_payment_receipt_tree" model="ir.ui.view">
-        <field name="name">account.payment.receipt.tree</field>
+    <record id="view_account_payment_receipt_list" model="ir.ui.view">
+        <field name="name">account.payment.receipt.list</field>
         <field name="model">account.payment.receipt</field>
         <field name="arch" type="xml">
-            <tree>
+            <list>
                 <field name="name"/>
                 <field name="date"/>
                 <field name="partner_id"/>
@@ -16,7 +16,7 @@
                     icon="fa-print"
                     class="oe_highlight"
                 />
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -56,7 +56,7 @@
     <record id="action_account_payment_receipt" model="ir.actions.act_window">
         <field name="name">Grouped Payment Receipts</field>
         <field name="res_model">account.payment.receipt</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
         <field name="domain">[('state', '=', 'posted')]</field>
     </record>
 
